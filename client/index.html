@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Scope</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href=https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.css>
+    <link rel="stylesheet" type="text/css" href=https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.8/components/modal.css>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.8/semantic.js"></script>
+    <script scr="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.8/components/modal.js"></script>
+</head>
+
+<body>
+
+    <div class="ui container center aligned piled segment" style="margin-top:120px;padding:20px">
+        <div class="section">
+
+            <div class="ui grid">
+                <div class="five wide column">
+                    <h2>Gundam</h2>
+                    <button class="ui red button" id="gundamButton">Skills</button>
+
+                </div>
+                <div class="five wide column">
+                    <h2>Url</h2>
+                    <button class="ui yellow button" data-heading="Index Page" id="urlButton">Url</button>
+
+                    <br><br><br>
+                    <h5 id="main_text" class="header col s12 light">All Magic Button</h5>
+                    <button class="ui orange button" id="primary_button" class="btn-large waves-effect waves-light orange">Change</button>
+
+                </div>
+                <div class="five wide column">
+                    <h2>Meal</h2>
+                    <button class="ui teal button" id="mealButton">Meal</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#urlButton').click(function(e) {
+                let arr = []
+                let heading = $('#urlButton').attr('data-heading')
+                let url = document.URL
+                $('#main_text').html(heading)
+                arr.push(heading, url)
+                localStorage.setItem('key', JSON.stringify(arr))
+            })
+            $('#gundamButton').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:3000/gundam',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#main_text').html(data[0])
+                        localStorage.setItem('key', JSON.stringify(data))
+                    }
+                })
+            })
+            $('#mealButton').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:3000/meals',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $('#main_text').html(data[0])
+                        localStorage.setItem('key', JSON.stringify(data))
+                    }
+                })
+            })
+            $('#primary_button').click(function(e) {
+                let indexArr = JSON.parse(localStorage.getItem('key'))
+                let current = $('#main_text').html()
+                let arrayLength = indexArr.length
+                let random = Math.floor(Math.random() * 5)
+                if (indexArr.length === 2) {
+                    if (current == indexArr[0]) {
+                        $('#main_text').html(indexArr[1])
+                    }
+                    if (current == indexArr[1]) {
+                        $('#main_text').html(indexArr[0])
+                    }
+                } else {
+                    $('#main_text').html(indexArr[random])
+                }
+            })
+        })
+    </script>
+
+</body>
+
+</html>
